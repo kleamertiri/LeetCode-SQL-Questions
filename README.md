@@ -176,4 +176,20 @@ HAVING COUNT(DISTINCT user_id) > 0;
 | 2019-07-20 | 2            |
 | 2019-07-21 | 2            |
 
+#### :zap:[1084. Sales Analysis III](https://leetcode.com/problems/sales-analysis-iii/)
+Write an SQL query that reports the **products** that were **only** sold in the first quarter of ```2019```. That is, between ```2019-01-01``` and ```2019-03-31``` inclusive.
 
+```sql
+SELECT  DISTINCT S.product_id,P.product_name
+FROM Sales AS S
+LEFT JOIN Product AS P
+ON s.product_id = p.product_id
+WHERE S.product_id NOT IN (SELECT product_id
+                          FROM Sales
+                          WHERE sale_date < '2019-01-01' or sale_date > '2019-03-31')
+```
+
+**Output:**
+| product_id | product_name |
+| ---------- | ------------ |
+| 1          | S8           |
