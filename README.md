@@ -1,7 +1,7 @@
 # 🔸LeetCode SQL Questions
 [LeetCode](https://leetcode.com/) is the platform to expand your knowledge and prepare for technical interviews.
 
-I'll be solving SQL questions in MS SQL Server.
+Here you'll find my SQL solutions in MS SQL Server.
 
 <details>
      <summary>:green_circle:Level: Easy</summary>
