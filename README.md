@@ -3,8 +3,11 @@
 
 I'll be solving SQL questions in MS SQL Server.
 
+<details>
+     <summary>:green_circle:Level: Easy</summary>
 
-## Level: Easy
+## Solved:heavy_check_mark: 
+    
 #### :zap:[1873. Calculate Special Bonus](https://leetcode.com/problems/calculate-special-bonus/)
 Write an SQL query to calculate the bonus of each employee. The bonus of an employee is ```100%``` of their salary if the ID of the employee is **an odd number** and **the employee name does not start with the character** ```'M'```. The bonus of an employee is ```0``` otherwise.
 Return the result table ordered by ```employee_id```.
@@ -193,3 +196,4 @@ WHERE S.product_id NOT IN (SELECT product_id
 | product_id | product_name |
 | ---------- | ------------ |
 | 1          | S8           |
+</details>
