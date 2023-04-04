@@ -419,6 +419,7 @@ WITH CTE_unit AS (
 SELECT *
 FROM CTE_unit
 WHERE unit >=100
+```
 
 **Output:**
 | product_name       | unit |
