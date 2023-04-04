@@ -53,7 +53,7 @@ Write an SQL query to **delete** all the duplicate emails, keeping only one uniq
 ```sql
 DELETE P1
 FROM Person P1, Person P2
-WHERE P1.email = P2.Email AND P1.Id>P2.Id;
+WHERE P1.email = P2.Email AND P1.Id > P2.Id;
 ```
 **Output:**
 | id | email            |
@@ -95,15 +95,10 @@ GROUP BY st.student_id, st.student_name, sb.subject_name
 
 #### :zap:[1211.Queries Quality and Percentage](https://leetcode.com/problems/queries-quality-and-percentage/)
 We define ```query``` quality as:
-```
-The average of the ratio between query rating and its position.
-```
+```The average of the ratio between query rating and its position.```
 We also define ```poor query percentage``` as:
-```
-The percentage of all queries with rating less than 3.
-```
+```The percentage of all queries with rating less than 3.```
 Write an SQL query to find each ```query_name```, the ```quality``` and ```poor_query_percentage```.
-
 Both ```quality``` and ```poor_query_percentage``` should be **rounded to 2 decimal places**.
 ```sql
 SELECT query_name,
@@ -210,4 +205,342 @@ ORDER BY user_id;
 | ------- | ----- |
 | 1       | Alice |
 | 2       | Bob   |
+
+#### :zap:[181. Employees Earning More Than Their Managers](https://leetcode.com/problems/employees-earning-more-than-their-managers/)
+Write an SQL query to find the employees who earn more than their managers.
+```sql
+SELECT name AS Employee
+FROM Employee as e
+WHERE salary > (SELECT salary FROM Employee  WHERE id = e.managerID)
+```
+**Output:**
+| Employee |
+| -------- |
+| Joe      |
+
+#### :zap:[182. Duplicate Emails](https://leetcode.com/problems/duplicate-emails/)
+Write an SQL query to report all the duplicate emails. Note that it's guaranteed that the email field is not NULL.
+```sql
+SELECT email
+FROM Person
+GROUP BY email
+HAVING COUNT(email) > 1; 
+```
+**Output:**
+| email   |
+| ------- |
+| a@b.com |
+
+#### :zap:[183. Customers Who Never Order](https://leetcode.com/problems/customers-who-never-order/)
+Write an SQL query to report all customers who never order anything.
+```sql
+SELECT C.name AS Customers
+FROM Customers AS C
+LEFT JOIN Orders AS O
+ON C.id = O.customerId
+WHERE O.id IS NULL;
+```
+**Output:**
+| Customers |
+| --------- |
+| Henry     |
+| Max       |
+
+#### :zap:[197. Rising Temperature](https://leetcode.com/problems/rising-temperature/)
+Write an SQL query to find all dates' ```Id``` with higher temperatures compared to its previous dates (yesterday).
+```sql
+SELECT w.id AS Id
+FROM Weather w
+JOIN Weather yesterday
+ON DATEDIFF(DAY, yesterday.recordDate, w.recordDate) = 1
+WHERE w.temperature > yesterday.temperature;
+```
+**Output:**
+| Id |
+| -- |
+| 2  |
+| 4  |
+
+#### :zap:[577. Employee Bonus](https://leetcode.com/problems/employee-bonus/)
+Write an SQL query to report the name and bonus amount of each employee with a bonus **less than** ```1000```.
+
+```sql
+SELECT E.name, B.bonus
+FROM Employee AS E
+LEFT JOIN Bonus AS B
+ON E.empId = B.empId
+WHERE B.bonus < 1000 OR B.bonus IS NULL;
+```
+**Output:**
+| name | bonus |
+| ---- | ----- |
+| Brad | null  |
+| John | null  |
+| Dan  | 500   |
+
+#### :zap:[584. Find Customer Referee](https://leetcode.com/problems/find-customer-referee/)
+Write an SQL query to report the names of the customer that are not referred by the customer with ```id = 2```.
+```sql
+SELECT name
+FROM Customer
+WHERE referee_id != 2 OR referee_id IS NULL;
+```
+**Output:**
+| name |
+| ---- |
+| Will |
+| Jane |
+| Bill |
+| Zack |
+
+#### :zap:[586. Customer Placing the Largest Number of Orders](https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/)
+Write an SQL query to find the ```customer_number``` for the customer who has placed **the largest number of orders**.
+The test cases are generated so that **exactly one customer** will have placed more orders than any other customer.
+
+```sql
+SELECT TOP 1 customer_number
+FROM Orders
+GROUP BY customer_number
+ORDER BY COUNT(customer_number) DESC;
+```
+**Output:**
+| customer_number |
+| --------------- |
+| 3               |
+
+#### :zap:[607. Sales Person](https://leetcode.com/problems/sales-person/)
+Write an SQL query to report the names of all the salespersons who did not have any orders related to the company with the name **"RED"**.
+```sql
+SELECT  DISTINCT S.name
+FROM SalesPerson AS S
+LEFT JOIN Orders AS O
+ON S.sales_id = O.sales_id
+WHERE S.sales_id NOT IN (
+    SELECT DISTINCT o.sales_id
+    FROM Orders o
+    INNER JOIN Company c ON o.com_id = c.com_id
+    WHERE c.name = 'RED'
+)
+```
+**Output:**
+| name |
+| ---- |
+| Alex |
+| Amy  |
+| Mark |
+
+#### :zap:[620. Not Boring Movies](https://leetcode.com/problems/not-boring-movies/)
+Write an SQL query to report the movies with an odd-numbered ID and a description that is not ```"boring"```.
+Return the result table ordered by ```rating``` **in descending order**.
+```sql
+SELECT *
+FROM Cinema
+WHERE id % 2 != 0 AND description NOT IN (
+  SELECT description FROM Cinema WHERE description = 'boring'
+)
+ORDER BY rating DESC;
+```
+**Output:**
+| id | movie      | description | rating |
+| -- | ---------- | ----------- | ------ |
+| 5  | House card | Interesting | 9.1    |
+| 1  | War        | great 3D    | 8.9    |
+
+#### :zap:[1050. Actors and Directors Who Cooperated At Least Three Times](https://leetcode.com/problems/actors-and-directors-who-cooperated-at-least-three-times/)
+Write a SQL query for a report that provides the pairs ```(actor_id, director_id)``` where the actor has cooperated with the director at least three times.
+```sql
+SELECT actor_id, director_id
+FROM ActorDirector
+GROUP BY actor_id, director_id
+HAVING COUNT(actor_id)>=3;
+```
+**Output:**
+| actor_id | director_id |
+| -------- | ----------- |
+| 1        | 1           |
+
+#### :zap:[1075. Project Employees I](https://leetcode.com/problems/project-employees-i/)
+Write an SQL query that reports the **average** experience years of all the employees for each project, **rounded to 2 digits**.
+```sql
+SELECT p.project_id, ROUND(AVG(CAST(e.experience_years AS decimal(5,2))), 2) AS  average_years
+FROM Project AS p
+JOIN Employee AS e
+ON p.employee_id = e.employee_id
+GROUP BY p.project_id;
+```
+**Output:**
+| project_id | average_years |
+| ---------- | ------------- |
+| 1          | 2             |
+| 2          | 2.5           |
+
+#### :zap:[1148. Article Views I](https://leetcode.com/problems/article-views-i/)
+Write an SQL query to find all the authors that viewed at least one of their own articles.
+Return the result table sorted by ```id``` in ascending order.
+
+```sql
+SELECT DISTINCT author_id AS id
+FROM Views
+WHERE author_id = viewer_id;
+```
+**Output:**
+| id |
+| -- |
+| 4  |
+| 7  |
+
+#### :zap:[1251. Average Selling Price](https://leetcode.com/problems/average-selling-price/)
+Write an SQL query to find the average selling price for each product. ```average_price``` should be **rounded to 2 decimal places**.
+```sql
+SELECT p.product_id, ROUND(SUM(p.price * u.units) / CONVERT(decimal(7,2), SUM(u.units)), 2) AS average_price
+FROM Prices AS p
+JOIN UnitsSold AS u 
+ON p.product_id = u.product_id
+WHERE u.purchase_date between p.start_date AND p.end_date
+GROUP BY p.product_id;
+```
+**Output:**
+| product_id | average_price |
+| ---------- | ------------- |
+| 1          | 6.96          |
+| 2          | 16.96         |
+
+#### :zap:[1327. List the Products Ordered in a Period](https://leetcode.com/problems/list-the-products-ordered-in-a-period/)
+```sql
+WITH CTE_unit AS (
+  SELECT p.product_name, SUM(o.unit) AS unit
+  FROM Products AS p
+  JOIN Orders AS o
+  ON p.product_id = o.product_id
+  WHERE MONTH(o.order_date) = '02' AND YEAR(o.order_date) = '2020' 
+  GROUP BY p.product_name
+)
+
+SELECT *
+FROM CTE_unit
+WHERE unit >=100
+
+**Output:**
+| product_name       | unit |
+| ------------------ | ---- |
+| Leetcode Kit       | 100  |
+| Leetcode Solutions | 130  |
+
+#### :zap:[1407. Top Travellers](https://leetcode.com/problems/top-travellers/)
+Write an SQL query to report the distance traveled by each user.
+Return the result table ordered by ```travelled_distance``` in **descending order**, if two or more users traveled the same distance, order them by their name in **ascending order**.
+
+```sql
+SELECT u.name, COALESCE(SUM(r.distance), 0) AS travelled_distance
+FROM Users AS u
+LEFT JOIN Rides AS r
+ON u.id = r.user_id
+GROUP BY u.name, u.id
+ORDER BY travelled_distance DESC, u.name ASC;
+```
+
+**Output:**
+| name     | travelled_distance |
+| -------- | ------------------ |
+| Elvis    | 450                |
+| Lee      | 450                |
+| Bob      | 317                |
+| Jonathan | 312                |
+| Alex     | 222                |
+| Alice    | 120                |
+| Donald   | 0                  |
+
+#### :zap:[1484. Group Sold Products By The Date](https://leetcode.com/problems/group-sold-products-by-the-date/)
+Write an SQL query to find for each date the number of different products sold and their names.
+The sold products names for each date should be sorted lexicographically.
+Return the result table ordered by ```sell_date```.
+```sql
+with CTE_DISTINCT AS
+(
+    SELECT DISTINCT sell_date, product
+    FROM Activities
+)
+
+SELECT sell_date, COUNT(DISTINCT product) AS num_sold, STRING_AGG(product, ',') WITHIN GROUP (ORDER BY product) AS products
+FROM CTE_DISTINCT
+GROUP BY sell_date
+ORDER BY sell_date;
+```
+**Output:**
+| sell_date  | num_sold | products                     |
+| ---------- | -------- | ---------------------------- |
+| 2020-05-30 | 3        | Basketball,Headphone,T-Shirt |
+| 2020-06-01 | 2        | Bible,Pencil                 |
+| 2020-06-02 | 1        | Mask                         |
+
+#### :zap:[1527. Patients With a Condition](https://leetcode.com/problems/patients-with-a-condition/)
+Write an SQL query to report the patient_id, patient_name and conditions of the patients who have Type I Diabetes. Type I Diabetes always starts with ```DIAB1``` prefix.
+
+```sql
+SELECT patient_id, patient_name, conditions
+FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%' OR conditions LIKE '%DIAB1';
+```
+**Output:**
+| patient_id | patient_name | conditions   |
+| ---------- | ------------ | ------------ |
+| 3          | Bob          | DIAB100 MYOP |
+| 4          | George       | ACNE DIAB100 |
+
+#### :zap:[1795. Rearrange Products Table](https://leetcode.com/problems/rearrange-products-table/)
+Write an SQL query to rearrange the ```Products``` table so that each row has ```(product_id, store, price)```. If a product is not available in a store, do **not** include a row with that ```product_id``` and ```store``` combination in the result table.
+```sql
+SELECT product_id, 'store1' AS store, store1 AS price
+FROM Products
+WHERE store1 IS NOT NULL
+UNION 
+SELECT product_id, 'store2' AS store, store2 AS price
+FROM Products
+WHERE store2 IS NOT NULL
+UNION 
+SELECT product_id, 'store3' AS store, store3 AS price
+FROM Products
+WHERE store3 IS NOT NULL;
+```
+**Output:**
+| product_id | store  | price |
+| ---------- | ------ | ----- |
+| 0          | store1 | 95    |
+| 0          | store2 | 100   |
+| 0          | store3 | 105   |
+| 1          | store1 | 70    |
+| 1          | store3 | 80    |
+
+
+#### :zap:[1965. Employees With Missing Information](https://leetcode.com/problems/employees-with-missing-information/)
+Write an SQL query to report the IDs of all the employees with **missing information**. The information of an employee is missing if:
+- The employee's **name** is missing, or
+- The employee's **salary** is missing.
+Return the result table ordered by ```employee_id``` in **ascending order**.
+```sql
+--1--
+SELECT employee_id
+FROM Employees
+WHERE employee_id NOT IN (SELECT employee_id FROM Salaries)
+
+UNION
+
+SELECT employee_id
+FROM Salaries
+WHERE employee_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY employee_id;
+
+--2--
+SELECT concat(e.employee_id, s.employee_id) AS employee_id
+FROM Employees AS e
+FULL JOIN Salaries AS s
+ON e.employee_id = s.employee_id
+WHERE name IS NULL OR salary IS NULL
+ORDER BY 1 ASC;
+
+**Output:**
+| employee_id |
+| ----------- |
+| 1           |
+| 2           |
 </details>
