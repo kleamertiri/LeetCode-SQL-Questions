@@ -514,12 +514,16 @@ FULL JOIN Salaries AS s
 ON e.employee_id = s.employee_id
 WHERE name IS NULL OR salary IS NULL
 ORDER BY 1 ASC;
-
+```
+     
 **Output:**
 | employee_id |
 | ----------- |
 | 1           |
 | 2           |
+
+</details>
+
  
 
 
