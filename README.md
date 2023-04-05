@@ -540,6 +540,24 @@ AND user_id NOT IN (SELECT user_id FROM Users WHERE mail LIKE '%[^a-z0-9._-]%@le
 | 3       | Annabelle | bella-@leetcode.com     |
 | 4       | Sally     | sally.come@leetcode.com |
      
+#### :zap:[1581. Customer Who Visited but Did Not Make Any Transactions](https://leetcode.com/problems/customer-who-visited-but-did-not-make-any-transactions/description/)
+Write a SQL query to find the IDs of the users who visited without making any transactions and the number of times they made these types of visits.
+```sql
+SELECT v.customer_id, COUNT(v.visit_id) AS count_no_trans
+FROM Visits AS v
+LEFT JOIN Transactions AS t
+ON v.visit_id = t.visit_id
+WHERE t.amount is null
+GROUP BY v.customer_id;
+```
+**Output:**
+| customer_id | count_no_trans |
+| ----------- | -------------- |
+| 30          | 1              |
+| 54          | 2              |
+| 96          | 1              |
+     
+     
 </details>
 
 <details>
