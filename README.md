@@ -539,6 +539,7 @@ AND user_id NOT IN (SELECT user_id FROM Users WHERE mail LIKE '%[^a-z0-9._-]%@le
 | 1       | Winston   | winston@leetcode.com    |
 | 3       | Annabelle | bella-@leetcode.com     |
 | 4       | Sally     | sally.come@leetcode.com |
+     
 </details>
 
 <details>
