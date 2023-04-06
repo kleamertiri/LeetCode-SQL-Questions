@@ -556,8 +556,30 @@ GROUP BY v.customer_id;
 | 30          | 1              |
 | 54          | 2              |
 | 96          | 1              |
-     
-     
+
+#### :zap:[1587. Bank Account Summary II](https://leetcode.com/problems/bank-account-summary-ii/description/)
+Write an SQL query to report the name and balance of users with a balance higher than `10000`. The balance of an account is equal to the sum of the amounts of all transactions involving that account.
+
+```sql
+WITH CTE_balance AS (
+    SELECT u.name, SUM(t.amount) AS balance
+    FROM Users AS u
+    JOIN Transactions AS t
+    ON u.account = t.account
+    GROUP BY u.name
+)
+
+SELECT * 
+FROM CTE_balance
+WHERE balance > 10000;
+```
+
+**Output:**
+| name  | balance |
+| ----- | ------- |
+| Alice | 11000   |
+
+
 </details>
 
 <details>
@@ -575,6 +597,35 @@ WHERE salary != (SELECT MAX(salary) FROM Employee);
 | SecondHighestSalary |
 | ------------------- |
 | 200                 |
+
+#### :zap:[608. Tree Node](https://leetcode.com/problems/tree-node/?envType=study-plan&id=sql-i)
+Each node in the tree can be one of three types:
+
+- **"Leaf"**: if the node is a leaf node.
+- **"Root"**: if the node is the root of the tree.
+- **"Inner"**: If the node is neither a leaf node nor a root node.
+
+Write an SQL query to report the type of each node in the tree.
+
+```sql
+SELECT id, 
+CASE 
+    WHEN p_id IS NULL THEN 'Root'
+    WHEN id IN (SELECT p_id FROM Tree WHERE p_id IS NOT NULL) THEN 'Inner'
+    ELSE 'Leaf'
+END AS type
+FROM Tree;
+```
+
+**Output:**
+| id | type  |
+| -- | ----- |
+| 1  | Root  |
+| 2  | Inner |
+| 3  | Leaf  |
+| 4  | Leaf  |
+| 5  | Leaf  |
+
 </details>
 
  
