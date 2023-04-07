@@ -601,8 +601,67 @@ GROUP BY machine_id
 | 0          | 0.894           |
 | 1          | 0.995           |
 | 2          | 1.456           |
-     
 
+     
+#### :zap:[1693. Daily Leads and Partners](https://leetcode.com/problems/daily-leads-and-partners/)
+Write an SQL query that will, for each `date_id` and `make_name`, return the number of **distinct** `lead_id`'s and **distinct** `partner_id`'s.
+
+```sql
+SELECT date_id, make_name, COUNT(DISTINCT lead_id) AS unique_leads, COUNT(DISTINCT partner_id) AS unique_partners
+FROM DailySales
+GROUP BY date_id, make_name;
+```
+     
+**Output:**
+| date_id    | make_name | unique_leads | unique_partners |
+| ---------- | --------- | ------------ | --------------- |
+| 2020-12-07 | honda     | 3            | 2               |
+| 2020-12-07 | toyota    | 1            | 2               |
+| 2020-12-08 | honda     | 2            | 2               |
+| 2020-12-08 | toyota    | 2            | 3               |
+
+#### :zap:[1789. Primary Department for Each Employee](https://leetcode.com/problems/primary-department-for-each-employee/)
+Employees can belong to multiple departments. When the employee joins other departments, they need to decide which department is their primary department. Note that when an employee belongs to only one department, their primary column is `'N'`.
+
+Write an SQL query to report all the employees with their primary department. For employees who belong to one department, report their only department.     
+```sql
+WITH CTE_count AS (
+  SELECT *,  COUNT(*) OVER(PARTITION BY employee_id) AS nr_emp_id
+FROM Employee 
+)
+
+SELECT employee_id, department_id
+FROM CTE_count
+WHERE nr_emp_id = 1 OR (nr_emp_id > 1 AND primary_flag = 'Y')
+```
+
+**Output:**
+| employee_id | department_id |
+| ----------- | ------------- |
+| 1           | 1             |
+| 2           | 1             |
+| 3           | 3             |
+| 4           | 3             |
+
+#### :zap:[1978. Employees Whose Manager Left the Company](https://leetcode.com/problems/employees-whose-manager-left-the-company/)
+Write an SQL query to report the IDs of the employees whose salary is strictly less than `$30000` and whose manager left the company. When a manager leaves the company, their information is deleted from the `Employees` table, but the reports still have their `manager_id` set to the manager that left.
+
+Return the result table ordered by `employee_id`. 
+ 
+```sql
+SELECT employee_id
+FROM Employees
+WHERE salary < 30000 AND manager_id NOT IN (SELECT employee_id FROM Employees)
+ORDER BY employee_id;
+```
+                    
+**Output:**
+| employee_id |
+| ----------- |
+| 11          |    
+      
+                    
+                    
 </details>
 
 <details>
