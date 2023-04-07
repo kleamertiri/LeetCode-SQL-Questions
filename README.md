@@ -660,8 +660,33 @@ ORDER BY employee_id;
 | ----------- |
 | 11          |    
       
-                    
-                    
+#### :zap:[1731. The Number of Employees Which Report to Each Employee](https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/)           For this problem, we will consider a **manager** an employee who has at least 1 other employee reporting to them.
+
+Write an SQL query to report the ids and the names of all managers, the number of employees who report **directly** to them, and the average age of the reports rounded to the nearest integer.
+
+Return the result table ordered by `employee_id`.         
+
+```sql
+WITH CTE_manager AS (
+    
+    SELECT e1.employee_id, e1.name, COUNT(e2.reports_to) AS reports_count, 
+           CEILING(AVG(CONVERT(decimal(7,2),e2.age))) AS average_age
+    FROM Employees AS e1, Employees AS e2
+    WHERE e1.employee_id = e2.reports_to
+    GROUP BY e1.employee_id, e1.name
+)
+
+SELECT *
+FROM CTE_manager
+WHERE reports_count > 0
+ORDER BY employee_id;
+```
+
+**Output:**
+| employee_id | name  | reports_count | average_age |
+| ----------- | ----- | ------------- | ----------- |
+| 9           | Hercy | 2             | 39          |
+
 </details>
 
 <details>
