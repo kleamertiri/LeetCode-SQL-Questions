@@ -735,6 +735,84 @@ FROM Tree;
 | 4  | Leaf  |
 | 5  | Leaf  |
 
+#### :zap:[180. Consecutive Numbers](https://leetcode.com/problems/consecutive-numbers/)
+
+Write an SQL query to find all numbers that appear at least three times consecutively.
+
+```sql
+WITH CTE_logDetails AS (
+    SELECT id, LAG(num) OVER (ORDER BY id) AS PrevNum
+            ,num AS CurrentNum
+            ,LEAD(num) OVER (ORDER BY id) AS NextNum
+    FROM Logs
+)
+
+SELECT DISTINCT CurrentNum AS ConsecutiveNums
+FROM CTE_logDetails
+WHERE PrevNum = CurrentNum AND CurrentNum = NextNum;
+```
+**Output:**
+| ConsecutiveNums |
+| --------------- |
+| 1               |
+
+#### :zap:[1158. Market Analysis I](https://leetcode.com/problems/market-analysis-i/)
+
+Write an SQL query to find for each user, the join date and the number of orders they made as a buyer in `2019`.
+
+```sql
+SELECT
+    u.user_id AS buyer_id,
+    u.join_date,
+    COUNT(CASE WHEN YEAR(o.order_date) = 2019 THEN 1 ELSE NULL END) AS orders_in_2019
+FROM
+    Users AS u
+    LEFT JOIN Orders AS o ON u.user_id = o.buyer_id
+GROUP BY
+    u.user_id,
+    u.join_date
+ORDER BY
+    u.user_id;
+```
+**Output:**
+
+| order_id | order_date | item_id | buyer_id | seller_id |
+| -------- | ---------- | ------- | -------- | --------- |
+| 1        | 2019-08-01 | 4       | 1        | 2         |
+| 2        | 2018-08-02 | 2       | 1        | 3         |
+| 3        | 2019-08-03 | 3       | 2        | 3         |
+| 4        | 2018-08-04 | 1       | 4        | 2         |
+| 5        | 2018-08-04 | 1       | 3        | 4         |
+| 6        | 2019-08-05 | 2       | 2        | 4         |
+
+#### :zap:[1393. Capital Gain/Loss](https://leetcode.com/problems/capital-gainloss/)
+
+Write an SQL query to report the **Capital gain/loss** for each stock.
+
+The **Capital gain/loss** of a stock is the total gain or loss after buying and selling the stock one or many times.
+
+```sql
+WITH CTE_stock AS (
+    SELECT stock_name,
+          CASE WHEN operation = 'Buy' THEN price END AS Buy,
+          CASE WHEN operation = 'Sell' THEN price END AS Sell
+    FROM Stocks
+    
+)
+
+SELECT stock_name, (SUM(Sell) - SUM(Buy)) AS capital_gain_loss
+FROM CTE_stock
+GROUP BY stock_name;
+```
+
+**Output:**
+| stock_name   | capital_gain_loss |
+| ------------ | ----------------- |
+| Corona Masks | 9500              |
+| Handbags     | -23000            |
+| Leetcode     | 8000              |
+
+
 </details>
 
  
