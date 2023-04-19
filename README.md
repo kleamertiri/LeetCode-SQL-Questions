@@ -813,6 +813,26 @@ GROUP BY stock_name;
 | Leetcode     | 8000              |
 
 
+#### :zap:[570. Managers with at Least 5 Direct Reports](https://leetcode.com/problems/managers-with-at-least-5-direct-reports/)
+    
+Write an SQL query to report the managers with at least **five direct reports**.
+```sql
+SELECT name
+FROM employee
+WHERE id IN (
+              SELECT managerId FROM Employee
+              GROUP BY managerId
+              HAVING COUNT(managerID) >= 5)
+```
+**Output:**
+     
+     
+| name |
+| ---- |
+| John |     
+
+     
+
 </details>
 
  
