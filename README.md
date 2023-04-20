@@ -855,6 +855,37 @@ AND DATEDIFF(day, c.start_date,a.event_date) = 1
 | -------- |
 | 0.33     |
 
+#### :zap:[585. Investments in 2016](https://leetcode.com/problems/investments-in-2016/description/)
+Write an SQL query to report the sum of all total investment values in 2016 `tiv_2016`, for all policyholders who:
+
+ - have the same `tiv_2015` value as one or more other policyholders, and
+ - are not located in the same city like any other policyholder (i.e., the `(lat, lon)` attribute pairs must be unique).
+     
+Round `tiv_2016` to **two decimal places**.
+
+```sql
+SELECT ROUND(SUM(tiv_2016),2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+                  SELECT tiv_2015
+                  FROM Insurance
+                  GROUP BY tiv_2015
+                  HAVING COUNT(tiv_2015) > 1)
+AND CONCAT(lat, lon) IN (
+                  SELECT CONCAT(lat, lon)
+                  FROM Insurance
+                  GROUP BY lat, lon
+                  HAVING COUNT(*) = 1);
+```
+     
+     
+**Output:**
+     
+| tiv_2016 |
+| -------- |
+| 45       |
+     
+     
 </details>
 
  
