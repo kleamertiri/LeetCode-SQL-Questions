@@ -970,6 +970,35 @@ HAVING COUNT(p.product_key) = (SELECT COUNT(product_key) FROM Product)
 | 1           |
 | 3           |    
      
+
+#### :zap:[1070. Product Sales Analysis III](https://leetcode.com/problems/product-sales-analysis-iii/description/)
+     
+Write an SQL query that selects the **product id, year, quantity**, and **price** for the **first year** of every product sold.     
+
+```sql      
+WITH CTE_firstYear AS (
+                        SELECT product_id, MIN (year) AS first_year
+                        FROM Sales
+                        GROUP BY product_id)
+
+SELECT first.product_id, first.first_year, s.quantity, s.price
+FROM CTE_firstYear AS first
+INNER JOIN Sales AS S
+ON first.product_id = s.product_id
+WHERE s.year = first.first_year;
+```
+     
+**Output:**
+     
+| product_id | first_year | quantity | price |
+| ---------- | ---------- | -------- | ----- |
+| 100        | 2008       | 10       | 5000  |
+| 200        | 2011       | 15       | 9000  |     
+     
+     
+     
+     
+     
      
      
 </details>
