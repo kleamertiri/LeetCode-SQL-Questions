@@ -913,7 +913,44 @@ ORDER BY SUM(nr_of_friends) DESC;
 | 3  | 3   |
 
 
+#### :zap:[626. Exchange Seats](https://leetcode.com/problems/exchange-seats/)
 
+Write an SQL query to swap the seat id of every two consecutive students. If the number of students is odd, the id of the last student is not swapped.
+
+Return the result table ordered by `id` **in ascending order**.     
+     
+```sql
+SELECT (CASE WHEN id % 2 != 0 AND id = counts THEN id
+             WHEN id % 2 != 0 AND id != counts THEN id + 1
+             ELSE id - 1
+        END) as id, student
+FROM seat, (SELECT count(*) as counts FROM seat) as count_seats
+ORDER BY id;
+```
+     
+**Input:**                                         
+| id | student |                                 
+| -- | ------- |                                  
+| 1  | Abbot   |                                  
+| 2  | Doris   |                                  
+| 3  | Emerson |                                  
+| 4  | Green   |                                  
+| 5  | Jeames  |                                  
+     
+ **Output:**
+| id | student |
+| -- | ------- |
+| 1  | Doris   | 
+| 2  | Abbot   |
+| 3  | Green   |
+| 4  | Emerson |
+| 5  | Jeames  |       
+                                                           
+
+     
+     
+     
+     
 </details>
 
  
