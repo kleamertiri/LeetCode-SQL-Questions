@@ -885,7 +885,35 @@ AND CONCAT(lat, lon) IN (
 | -------- |
 | 45       |
      
-     
+#### :zap:[602. Friend Requests II: Who Has the Most Friends](https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/description/)
+
+Write an SQL query to find the people who have the most friends and the most friends number.
+
+The test cases are generated so that only one person has the most friends.
+
+```sql
+WITH CTE_friendsNr AS (
+          SELECT requester_id, COUNT(*) AS nr_of_friends
+          FROM RequestAccepted
+          GROUP BY requester_id
+          UNION ALL
+          SELECT accepter_id, COUNT(*) AS nr_of_friends
+          FROM RequestAccepted
+          GROUP BY accepter_id)
+
+SELECT TOP 1 requester_id AS id, SUM(nr_of_friends) AS num
+FROM CTE_friendsNr
+GROUP BY requester_id
+ORDER BY SUM(nr_of_friends) DESC;
+```
+
+**Output:**
+| id | num |
+| -- | --- |
+| 3  | 3   |
+
+
+
 </details>
 
  
