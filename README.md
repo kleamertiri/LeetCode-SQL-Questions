@@ -946,8 +946,29 @@ ORDER BY id;
 | 4  | Emerson |
 | 5  | Jeames  |       
                                                            
+#### :zap:[1045. Customers Who Bought All Products](https://leetcode.com/problems/customers-who-bought-all-products/description/)
 
-     
+Write an SQL query to report the customer ids from the `Customer` table that bought all the products in the `Product` table.
+
+Return the result table in **any order**.
+
+```sql
+SELECT c.customer_id
+FROM Product AS p
+inner JOIN (
+            SELECT DISTINCT *
+            FROM Customer
+) AS c
+ON p.product_key = c.product_key
+GROUP BY c.customer_id
+HAVING COUNT(p.product_key) = (SELECT COUNT(product_key) FROM Product)
+```
+
+ **Output:**
+| customer_id |
+| ----------- |
+| 1           |
+| 3           |    
      
      
      
