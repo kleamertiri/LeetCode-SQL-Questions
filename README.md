@@ -694,7 +694,7 @@ ORDER BY employee_id;
 <details>
      <summary>:orange_circle:Level: Medium</summary>
      
-## Solved:heavy_check_mark: 
+## Solved: 
 #### :zap:[176. Second Highest Salary](https://leetcode.com/problems/second-highest-salary/)
 Write an SQL query to report the second highest salary from the ```Employee``` table. If there is no second highest salary, the query should report ```null```.
 ```sql
@@ -996,8 +996,29 @@ WHERE s.year = first.first_year;
 | 200        | 2011       | 15       | 9000  |     
      
      
-     
-     
+ #### :zap:[178.Rank Scores](https://leetcode.com/problems/rank-scores/description/)  
+
+ Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:
+
+- The scores should be ranked from the highest to the lowest.
+- If there is a tie between two scores, both should have the same ranking.
+- After a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no holes between ranks.
+Return the result table ordered by score in descending order.
+
+```sql
+SELECT score, DENSE_RANK() OVER(ORDER BY score DESC) as rank
+from Scores
+```
+
+**Output:**   
+| score | rank |
+| ----- | ---- |
+| 4     | 1    |
+| 4     | 1    |
+| 3.85  | 2    |
+| 3.65  | 3    |
+| 3.65  | 3    |
+| 3.5   | 4    |
      
      
      
