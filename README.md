@@ -1020,7 +1020,44 @@ from Scores
 | 3.65  | 3    |
 | 3.5   | 4    |
      
-     
+
+#### :zap:[180.Consecutive Numbers](https://leetcode.com/problems/consecutive-numbers/)
+
+Find all numbers that appear at least three times consecutively.
+
+Return the result table in **any order**.
+
+The result format is in the following example.
+
+```sql
+SELECT distinct 
+    i3.num as ConsecutiveNums
+FROM 
+    logs i1,
+    logs i2,
+    logs i3
+WHERE 
+    i1.id=i2.id+1 AND 
+    i2.id=i3.id+1 AND 
+    i1.num=i2.num AND 
+    i2.num=i3.num
+```
+**Input:**
+| id | num |
+| -- | --- |
+| 1  | 1   |
+| 2  | 1   |
+| 3  | 1   |
+| 4  | 2   |
+| 5  | 1   |
+| 6  | 2   |
+| 7  | 2   |
+
+**Output:**  
+| ConsecutiveNums |
+| --------------- |
+| 1               |
+
      
 </details>
 
